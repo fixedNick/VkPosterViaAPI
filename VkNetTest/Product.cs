@@ -8,17 +8,75 @@ namespace VkNetTest
 {
     class Product
     {
+        // FileLogger.
+        private static ILogger Logger = new FileLogger();
+        // Variable for setup new product id; Loading at start of program from file config.txt;
+        // TODO: load var
+        private static int LastUsedPID = 0;
+
         // Unique product ID which given by method SetupUID;
-        public int PID;
+        public int PID { get; private set; }
+        // Product name
+        public string Name { get; protected set; }
+        // All about product in text
+        public string Description { get; protected set; }
+        // Product price
+        public double Price { get; protected set; }
+        // List of local files path to photos of product
+        public List<string> Photos { get; protected set; } = new List<string>();
+        // Collection of all products
         public static List<Product> Products { get; private set; } = new List<Product>();
 
+        /// <summary>
+        /// Main costructor.
+        /// </summary>
+        /// <param name="addToCollection">TRUE - Add new product and give PID to it. FALSE - Creating object w/o adding to products list</param>
+        public Product(string name, string desc, double price, List<string> photos = null, bool addToCollection = false)
+        {
+            Name = name;
+            Description = desc;
+            Price = price;
+            if (photos?.Count > 0)
+                Photos = photos;
 
-        /// TODO: impletent AddProduct
+            if (addToCollection == true)
+                AddProduct(this);
+        }
+
+        /// <summary>
+        /// Add new product into pool of all products.
+        /// </summary>
+        /// <param name="prod">Object of Product type which we gonna save</param>
         public static void AddProduct(Product prod)
-            => throw new NotImplementedException();
+        {
+            if (SetupPID(prod) == false)
+                throw new Exception("Не удалось назначить ID для продукта");
 
-        // TODO: setup unique ID
-        public void SetupUID()
-            => throw new NotImplementedException();
+            Products.Add(prod);
+            Logger.Print($"Product | Товар '{prod.Name}' успешно добавлен в общий пул товаров.");
+        }
+
+        /// <summary>
+        /// Setup Unique ID to product.
+        /// </summary>
+        /// <param name="prod">Object of Product</param>
+        /// <returns>
+        /// TRUE - PID Successfully setuped
+        /// FALSE - An exception thrown
+        /// </returns>
+        public static bool SetupPID(Product prod)
+        {
+            try
+            {
+                prod.PID = ++LastUsedPID;
+                Logger.Print($"Product | Товару {prod.Name} назначен PID: {LastUsedPID}");
+            }
+            catch
+            {
+                Logger.Print($"Product | Не удалось назначить PID товару {prod.Name}");
+                return false;
+            }
+            return true;
+        }
     }
 }
