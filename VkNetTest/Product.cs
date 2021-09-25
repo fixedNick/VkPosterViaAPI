@@ -11,8 +11,7 @@ namespace VkNetTest
         // FileLogger.
         private static ILogger Logger = new FileLogger();
         // Variable for setup new product id; Loading at start of program from file config.txt;
-        // TODO: load var
-        private static int LastUsedPID = 0;
+        private static int LastUsedPID = -1;
 
         // Unique product ID which given by method SetupUID;
         public int PID { get; private set; }
@@ -77,6 +76,13 @@ namespace VkNetTest
                 return false;
             }
             return true;
+        }
+
+        public static void SetLastID(int id)
+        {
+            if (LastUsedPID >= 0)
+                throw new Exception("Last ID already exists");
+            LastUsedPID = id;
         }
     }
 }

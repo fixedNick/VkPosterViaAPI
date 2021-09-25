@@ -33,6 +33,7 @@ namespace VkNetTest
             IOController.LoadItems<VKAccount>();
             IOController.LoadItems<VkCommunity>();
             IOController.LoadItems<Product>();
+            IOController.LoadConfig();
             MainForm = this;
         }
         /// Рабочая версия постинга в сообщество

@@ -13,8 +13,29 @@ namespace VkNetTest
         private const string VK_ACCOUNT_FOLDER_PATH = "vkAccounts";
         private const string VK_COMMUNITY_FOLDER_PATH = "vkCommunities";
         private const string VK_PRODUCT_FOLDER_PATH = "products";
+        private const string CONFIG_PATH = "config.txt";
 
         private static ILogger Logger = new FileLogger();
+
+        public static void LoadConfig()
+        {
+            if (System.IO.File.Exists(CONFIG_PATH) == false)
+                return;
+
+            using (var file = new System.IO.StreamReader(CONFIG_PATH))
+            {
+                var fhalf = file.ReadLine().Split('=');
+                if (fhalf?.Length > 1)
+                {
+                    switch(fhalf[0])
+                    {
+                        case "ProductLastID":
+                            Product.SetLastID(Convert.ToInt32(fhalf[1]));
+                            break;
+                    }
+                }
+            }
+        }
 
         public static void SaveItems<T>()
         {
