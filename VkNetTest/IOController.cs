@@ -15,8 +15,11 @@ namespace VkNetTest
         private const string VK_PRODUCT_FOLDER_PATH = "products";
         private const string CONFIG_PATH = "config.txt";
 
-        private static ILogger Logger = new FileLogger();
+        private static readonly ILogger Logger = new FileLogger();
 
+        /// <summary>
+        /// Load config at start of program
+        /// </summary>
         public static void LoadConfig()
         {
             if (System.IO.File.Exists(CONFIG_PATH) == false)
@@ -30,11 +33,24 @@ namespace VkNetTest
                     switch(fhalf[0])
                     {
                         case "ProductLastID":
-                            Product.SetLastID(Convert.ToInt32(fhalf[1]));
+                            Product.LastUsedPID = Convert.ToInt32(fhalf[1]);
                             break;
                     }
                 }
             }
+            Logger.Print("IOController | Конфиг успешно загружен.");
+        }
+
+        /// <summary>
+        /// Save current config vars data
+        /// </summary>
+        public static void UpadteConfig()
+        {
+            var file = new List<string>();
+            file.Add($"ProductLastID={Product.LastUsedPID}");
+            System.IO.File.WriteAllLines(CONFIG_PATH, file);
+
+            Logger.Print("IOController | Конфиг успешно обновлен.");
         }
 
         public static void SaveItems<T>()
@@ -87,8 +103,7 @@ namespace VkNetTest
 
         public static void LoadItems<T>()
         {
-            string folderName = string.Empty;
-            string fileName = string.Empty;
+            string folderName;
 
             if (typeof(T) == typeof(VKAccount))
                 folderName = VK_ACCOUNT_FOLDER_PATH;

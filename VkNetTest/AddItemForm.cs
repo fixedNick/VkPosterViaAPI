@@ -14,6 +14,7 @@ namespace VkNetTest
     {
         // Тип с которым работает форма. VkAccount/VKCommunity/Product
         private Type AddingType;
+        private readonly List<string> ReceivedPhotos;
 
         public AddItemForm()
         {
@@ -45,9 +46,24 @@ namespace VkNetTest
                 MessageBox.Show("Все поля обязательны к заполнению.");
                 return;
             }
-            else throw new Exception("Unknown type");
 
             // TODO: Добавление новых объектов акк/ком/прод
+            if(AddingType == typeof(Product))
+            {
+                var name = textBox1.Text.Trim();
+                var desc = textBox2.Text.Trim();
+                if(double.TryParse(textBox3.Text.Trim(), out double price) == false)
+                {
+                    MessageBox.Show("Поле цены заполнено некорректно.");
+                    return;
+                }
+
+                var photos = new List<string>();
+                if (ReceivedPhotos?.Count > 0)
+                    photos = ReceivedPhotos;
+
+                var prod = new Product(name, desc, price, photos, addToCollection: true);
+            }
 
         }
 

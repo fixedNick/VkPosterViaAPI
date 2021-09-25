@@ -9,9 +9,19 @@ namespace VkNetTest
     class Product
     {
         // FileLogger.
-        private static ILogger Logger = new FileLogger();
+        private static readonly ILogger Logger = new FileLogger();
         // Variable for setup new product id; Loading at start of program from file config.txt;
-        private static int LastUsedPID = -1;
+        private static int lastUserPID = -1;
+        public static int LastUsedPID
+        {
+            get => lastUserPID;
+            set
+            {
+                if (lastUserPID >= 0)
+                    throw new Exception("Last ID already exists");
+                lastUserPID = value;
+            }
+        }
 
         // Unique product ID which given by method SetupUID;
         public int PID { get; private set; }
@@ -46,7 +56,7 @@ namespace VkNetTest
         /// Add new product into pool of all products.
         /// </summary>
         /// <param name="prod">Object of Product type which we gonna save</param>
-        public static void AddProduct(Product prod)
+        protected static void AddProduct(Product prod)
         {
             if (SetupPID(prod) == false)
                 throw new Exception("Не удалось назначить ID для продукта");
@@ -63,7 +73,7 @@ namespace VkNetTest
         /// TRUE - PID Successfully setuped
         /// FALSE - An exception thrown
         /// </returns>
-        public static bool SetupPID(Product prod)
+        protected static bool SetupPID(Product prod)
         {
             try
             {
@@ -76,13 +86,6 @@ namespace VkNetTest
                 return false;
             }
             return true;
-        }
-
-        public static void SetLastID(int id)
-        {
-            if (LastUsedPID >= 0)
-                throw new Exception("Last ID already exists");
-            LastUsedPID = id;
         }
     }
 }

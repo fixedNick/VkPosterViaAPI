@@ -24,7 +24,7 @@ namespace VkNetTest
 
         public VkApi Api;
 
-        private static ILogger Logger = new FileLogger();
+        private static readonly ILogger Logger = new FileLogger();
 
         [JsonConstructor]
         public VKAccount(string login, string password)
