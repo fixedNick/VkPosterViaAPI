@@ -20,18 +20,35 @@ namespace VkNetTest
             InitializeComponent();
             button1.Click += Button1_Click;
         }
-
+        /// :VKCOM
+        /// ID
+        /// :PROD
+        /// NAME & DESC & PRICE & PHOTO
         private void Button1_Click(object sender, EventArgs e)
         {
-            if (AddingType == typeof(VKAccount))
+            if (AddingType == typeof(VKAccount) &&
+                ((textBox1.Text.Trim().Length == 0 && textBox2.Text.Trim().Length == 0) || textBox3.Text.Trim().Length == 0))
             {
-                //if ((textBox3.Text.Trim().Length == 0 && (textBox2.Text.Trim().Length == 0 && textBox1.Text.Trim().Length == 0)) ||
-                //    ())
-                //{
-                //    MessageBox.Show("Необходимо заполнить поля логин/пароль или хотя бы поле токен.");
-                //    return;
-                //}
+                MessageBox.Show("Необходимо заполнить поля логин/пароль или хотя бы поле токен.");
+                return;
             }
+            else if (AddingType == typeof(VkCommunity) && textBox1.Text.Trim().Length == 0)
+            {
+                MessageBox.Show("Необходимо ввести ID группы.");
+                return;
+            }
+            else if (AddingType == typeof(Product) && 
+                (textBox1.Text.Trim().Length == 0 ||
+                textBox2.Text.Trim().Length == 0 ||
+                textBox3.Text.Trim().Length == 0))
+            {
+                MessageBox.Show("Все поля обязательны к заполнению.");
+                return;
+            }
+            else throw new Exception("Unknown type");
+
+            // TODO: Добавление новых объектов акк/ком/прод
+
         }
 
         private void AddItemForm_Load(object sender, EventArgs e)
@@ -59,6 +76,7 @@ namespace VkNetTest
 
         private void AddItemForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            label5.Visible = false;
             Form1.MainForm.Enabled = true;
             Form1.MainForm.Focus();
         }

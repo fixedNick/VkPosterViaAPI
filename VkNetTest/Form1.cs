@@ -116,7 +116,6 @@ namespace VkNetTest
             (form.Controls["label3"] as Label).Visible = false;
             (form.Controls["textBox3"] as TextBox).Visible = false;
 
-            (form.Controls["label1"] as Label).Text = "Домен";
             (form.Controls["label2"] as Label).Text = "ID";
 
             form.Text = "Add VkCommunity";
