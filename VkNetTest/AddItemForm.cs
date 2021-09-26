@@ -14,7 +14,7 @@ namespace VkNetTest
     {
         // Тип с которым работает форма. VkAccount/VKCommunity/Product
         private Type AddingType;
-        private readonly List<string> ReceivedPhotos;
+        private readonly List<string> ReceivedPhotos = new List<string>();
 
         public AddItemForm()
         {
@@ -51,8 +51,8 @@ namespace VkNetTest
             if(AddingType == typeof(Product))
             {
                 var name = textBox1.Text.Trim();
-                var desc = textBox2.Text.Trim();
-                if(double.TryParse(textBox3.Text.Trim(), out double price) == false)
+                var desc = textBox3.Text.Trim();
+                if(double.TryParse(textBox2.Text.Trim(), out double price) == false)
                 {
                     MessageBox.Show("Поле цены заполнено некорректно.");
                     return;
@@ -65,6 +65,9 @@ namespace VkNetTest
                 var prod = new Product(name, desc, price, photos, addToCollection: true);
             }
 
+
+            label5.Text = "Выбранные файлы:";
+            this.Close();
         }
 
         private void AddItemForm_Load(object sender, EventArgs e)
@@ -95,6 +98,22 @@ namespace VkNetTest
             label5.Visible = false;
             Form1.MainForm.Enabled = true;
             Form1.MainForm.Focus();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Multiselect = true;
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                ReceivedPhotos.Clear();
+                ReceivedPhotos.AddRange(dialog.FileNames);
+                label5.Text = "";
+                foreach(var file in ReceivedPhotos)
+                    label5.Text += file + "\n\r";
+            }
+
         }
     }
 }

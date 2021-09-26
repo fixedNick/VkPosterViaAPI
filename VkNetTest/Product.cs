@@ -53,6 +53,16 @@ namespace VkNetTest
         }
 
         /// <summary>
+        /// Add saved products to collection of all products
+        /// </summary>
+        /// <param name="prod">Object Product</param>
+        public static void AddSavedProduct(Product prod)
+        {
+            if (prod.PID < 0) 
+                SetupPID(prod);
+            Products.Add(prod);
+        }
+        /// <summary>
         /// Add new product into pool of all products.
         /// </summary>
         /// <param name="prod">Object of Product type which we gonna save</param>

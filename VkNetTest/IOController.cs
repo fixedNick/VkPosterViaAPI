@@ -131,7 +131,7 @@ namespace VkNetTest
                 else if (typeof(T) == typeof(VkCommunity))
                     VkCommunity.AddCommunity(deserealizedObject as VkCommunity);
                 else if (typeof(T) == typeof(Product))
-                    Product.AddProduct(deserealizedObject as Product);
+                    Product.AddSavedProduct(deserealizedObject as Product);
 
                 Logger.Print($"IOContoller.LoadItems<{typeof(T)}> | File successfully loaded: {file}");
             }

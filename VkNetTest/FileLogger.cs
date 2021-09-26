@@ -12,10 +12,10 @@ namespace VkNetTest
 
         public void Print(string text)
         {
-            using (var sw = new System.IO.StreamWriter(logPath))
-            {
-                sw.WriteLine(text);
-            }
+            if (System.IO.File.Exists(logPath) == false)
+                System.IO.File.Create(logPath);
+
+            System.IO.File.AppendAllText(logPath, text + Environment.NewLine);
         }
     }
 }
